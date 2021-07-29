@@ -39,12 +39,12 @@ export default {
 
   computed: {
     ...mapGetters(['imageList']),
-    ...mapState(['shirtСardImage', 'gameIsStarted']),
+    ...mapState(['shirtСardImage', 'gameStatus']),
   },
 
   watch: {
-    gameIsStarted(value) {
-      if (value) {
+    gameStatus(value) {
+      if (value === 'started') {
         this.prepareCardsToStartGame();
         this.canFlip = true;
       }
@@ -72,7 +72,7 @@ export default {
             // TODO убрать чит на спидран
             this.openPairs += 8;
             if (this.openPairs >= 16) {
-              this.setGameStatus(false);
+              this.setGameStatus('end');
             }
           } else {
             this.resetCardByNumber(this.firstFlippedCard);

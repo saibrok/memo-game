@@ -2,13 +2,18 @@
   <div class="timer">
     <button
       class="timer__button"
-      v-if="!gameIsStarted"
+      v-if="gameStatus === 'prepare'"
       type="button"
       @click="startGame"
     >
       СТАРТ
     </button>
-    <div class="time" v-else>
+    <div class="time" v-if="gameStatus === 'started'">
+      {{ numberOfMinutes }} :
+      {{ numberOfSeconds > 9 ? numberOfSeconds : `0${numberOfSeconds}` }}
+    </div>
+    <div class="time" v-if="gameStatus === 'end'">
+      Игра окончена! Ваше время:
       {{ numberOfMinutes }} :
       {{ numberOfSeconds > 9 ? numberOfSeconds : `0${numberOfSeconds}` }}
     </div>
@@ -26,14 +31,24 @@ export default {
       timer: null,
     };
   },
+
   computed: {
-    ...mapState(['gameIsStarted']),
+    ...mapState(['gameStatus']),
   },
+
+  watch: {
+    gameStatus(value) {
+      if (value === 'end') {
+        clearInterval(this.timer);
+      }
+    },
+  },
+
   methods: {
     ...mapActions(['setGameStatus']),
 
     startGame() {
-      this.setGameStatus(true);
+      this.setGameStatus('started');
 
       setTimeout(() => {
         this.timer = setInterval(() => {

@@ -11,7 +11,7 @@ export default new Vuex.Store({
     baseUrlToImages: 'https://rickandmortyapi.com/api/character/avatar/',
     baseFileFormat: '.jpeg',
     shirtСardImage: 'https://rickandmortyapi.com/api/character/avatar/19.jpeg',
-    gameIsStarted: false,
+    gameStatus: 'prepare',
   },
 
   getters: {
@@ -28,7 +28,7 @@ export default new Vuex.Store({
     },
 
     SET_GAME_STATUS(state, status) {
-      state.gameIsStarted = status;
+      state.gameStatus = status;
     },
   },
 
