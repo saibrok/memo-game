@@ -5,28 +5,26 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    avatarList: [],
+    randomNumberList: [],
     baseNaumberOfAvalableAvatars: 671,
+    numberOfUniqueCard: 18,
     baseUrlToImages: 'https://rickandmortyapi.com/api/character/avatar/',
     baseFileFormat: '.jpeg',
-    shirtСardImage: 'https://rickandmortyapi.com/api/character/avatar/189.jpeg',
+    shirtСardImage: 'https://rickandmortyapi.com/api/character/avatar/19.jpeg',
     gameIsStarted: false,
   },
 
   getters: {
-    listOfImageLinks: (state) => {
-      return state.avatarList
-        .flatMap((item) => [item, item])
-        .sort(() => Math.random() - 0.5)
-        .map((item) => {
-          return `${state.baseUrlToImages}${item}${state.baseFileFormat}`;
-        });
+    imageList: (state) => {
+      return state.randomNumberList.map((item) => {
+        return `${state.baseUrlToImages}${item}${state.baseFileFormat}`;
+      });
     },
   },
 
   mutations: {
-    SET_AVATAR_LIST(state, avatarList) {
-      state.avatarList = avatarList;
+    SET_AVATAR_LIST(state, randomNumberList) {
+      state.randomNumberList = randomNumberList;
     },
 
     SET_GAME_STATUS(state, status) {
@@ -35,23 +33,31 @@ export default new Vuex.Store({
   },
 
   actions: {
-    generateAvatarList({ commit, state }) {
-      const avatarList = [];
+    generateRandomNumberList({ commit, state }) {
+      const randomNumberList = [];
 
-      while (avatarList.length < 18) {
+      if (state.baseNaumberOfAvalableAvatars < state.numberOfUniqueCard) {
+        return;
+      }
+
+      while (randomNumberList.length < 18) {
         var randomNumber =
           Math.floor(Math.random() * state.baseNaumberOfAvalableAvatars - 1) +
-          1;
+          2;
 
-        // randomNumber !== 189 - это номер картинки с обложкой
-        if (avatarList.indexOf(randomNumber) === -1 && randomNumber !== 189) {
-          avatarList.push(randomNumber);
+        // randomNumber !== 19/189 - эти номера такие же как у картинки с обложкой
+        if (
+          randomNumberList.indexOf(randomNumber) === -1 &&
+          randomNumber !== 19 &&
+          randomNumber !== 189
+        ) {
+          randomNumberList.push(randomNumber);
         }
       }
 
       commit(
         'SET_AVATAR_LIST',
-        avatarList.sort((a, b) => a - b),
+        randomNumberList.sort((a, b) => a - b),
       );
     },
 

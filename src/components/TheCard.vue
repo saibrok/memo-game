@@ -1,37 +1,36 @@
 <template>
   <div
     class="game__card"
-    @click="isFliped = !isFliped"
-    :class="{ flip: isFliped }"
+    @click="flipCard"
+    :class="{ flip: card.isFlipped, unvisible: !card.isShow }"
   >
-    <img class="game__card-image game__card-image_type_face" :src="image" />
-    <img class="game__card-image game__card-image_type_shirt" :src="shirt" />
+    <div
+      class="game__card-image game__card-image_type_face"
+      :style="{ backgroundImage: 'url(' + card.image + ')' }"
+    ></div>
+    <div
+      class="game__card-image game__card-image_type_shirt"
+      :style="{ backgroundImage: 'url(' + shirt + ')' }"
+    ></div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    image: {
-      type: String,
-      require: true,
-    },
-    shirt: {
-      type: String,
-      require: true,
-    },
-  },
-
-  data() {
-    return {
-      isFliped: false,
-      flipedCardCount: 0,
-    };
+    card: { type: Object, require: true },
+    shirt: { type: String, require: true },
+    canFlip: { type: Boolean, require: true },
   },
 
   methods: {
     flipCard() {
-      this;
+      if (!this.card.isFlipped && this.canFlip) {
+        this.$emit('cardFlipped', {
+          id: this.card.id,
+          number: this.card.number,
+        });
+      }
     },
   },
 };
@@ -46,6 +45,19 @@ export default {
   perspective: 1000px;
 }
 
+.game__card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  transition: 0.5s transform ease;
+  backface-visibility: hidden;
+  border-radius: 5px;
+  overflow: hidden;
+  background-position: center;
+  background-size: cover;
+}
+
 .flip .game__card-image_type_face {
   transform: rotateY(0);
 }
@@ -58,14 +70,11 @@ export default {
   transform: rotateY(180deg);
 }
 
-.game__card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  transition: 0.5s all ease;
-  backface-visibility: hidden;
-  border-radius: 5px;
-  overflow: hidden;
+.flip {
+  cursor: initial;
+}
+
+.unvisible {
+  visibility: hidden;
 }
 </style>

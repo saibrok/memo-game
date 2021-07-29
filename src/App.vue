@@ -13,11 +13,11 @@ import { mapActions } from 'vuex';
 
 export default {
   methods: {
-    ...mapActions(['generateAvatarList']),
+    ...mapActions(['generateRandomNumberList']),
   },
 
   created() {
-    this.generateAvatarList();
+    this.generateRandomNumberList();
   },
 };
 </script>
