@@ -43,6 +43,7 @@ export default {
   computed: {
     ...mapGetters(['imageList']),
     ...mapState(['shirtСardImage', 'gameStatus']),
+
     numberOfPairsToAdd() {
       return this.testMode ? 8 : 1;
     },
@@ -84,9 +85,16 @@ export default {
       const card = this.findCardbyId(id);
       card.isFlipped = !card.isFlipped;
 
+      let firstCardTimer = null;
+
       if (!this.firstFlippedCard) {
         this.firstFlippedCard = number;
+        firstCardTimer = setTimeout(() => {
+          this.resetCardByNumber(this.firstFlippedCard);
+          this.resetFlippedCard();
+        }, 5000);
       } else {
+        clearTimeout(firstCardTimer);
         this.secondFlippedCard = number;
         this.canFlip = false;
       }
