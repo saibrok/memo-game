@@ -8,6 +8,20 @@
   </div>
 </template>
 
+<script>
+import { mapActions } from 'vuex';
+
+export default {
+  methods: {
+    ...mapActions(['generateAvatarList']),
+  },
+
+  created() {
+    this.generateAvatarList();
+  },
+};
+</script>
+
 <style lang="scss">
 * {
   box-sizing: border-box;
@@ -22,7 +36,8 @@ body,
 }
 
 .container {
-  max-width: 1280px;
+  max-width: 100%;
+  width: 1280px;
   padding: 0 40px;
   margin: 0 auto;
 }
