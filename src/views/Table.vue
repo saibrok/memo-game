@@ -1,17 +1,17 @@
 <template>
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Имя</th>
-        <th>Время</th>
+  <table class="scoreTable">
+    <thead class="scoreTable__head">
+      <tr class="scoreTable__row">
+        <th class="scoreTable__col scoreTable__col-head">#</th>
+        <th class="scoreTable__col scoreTable__col-head">Имя</th>
+        <th class="scoreTable__col scoreTable__col-head">Время</th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="(row, index) in scoreTable" :key="index">
-        <td>{{ index + 1 }}</td>
-        <td>You</td>
-        <td>{{ row }}</td>
+    <tbody class="scoreTable__body">
+      <tr v-for="(row, index) in scoreTable" :key="index" class="scoreTable__row">
+        <td class="scoreTable__col">{{ index + 1 }}</td>
+        <td class="scoreTable__col">You</td>
+        <td class="scoreTable__col">{{ row }}</td>
       </tr>
     </tbody>
   </table>
@@ -28,39 +28,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-table {
+.scoreTable {
   width: 100%;
   border: none;
   margin-bottom: 20px;
 }
-table thead th {
+
+.scoreTable__row:nth-child(even) {
+  background: #f3f3f3;
+}
+
+.scoreTable__col-head {
   font-weight: bold;
-  text-align: left;
-  border: none;
-  padding: 10px 15px;
   background: #d8d8d8;
-  font-size: 14px;
 }
-table thead tr th:first-child {
-  border-radius: 8px 0 0 8px;
-}
-table thead tr th:last-child {
-  border-radius: 0 8px 8px 0;
-}
-table tbody td {
+
+.scoreTable__col {
   text-align: left;
   border: none;
   padding: 10px 15px;
   font-size: 14px;
   vertical-align: top;
-}
-table tbody tr:nth-child(even) {
-  background: #f3f3f3;
-}
-table tbody tr td:first-child {
-  border-radius: 8px 0 0 8px;
-}
-table tbody tr td:last-child {
-  border-radius: 0 8px 8px 0;
+
+  &:first-child {
+    border-radius: 8px 0 0 8px;
+  }
+
+  &:last-child {
+    border-radius: 0 8px 8px 0;
+  }
 }
 </style>

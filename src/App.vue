@@ -1,14 +1,11 @@
 <template>
   <div id="app">
     <nav id="nav" class="nav">
-      <router-link class="nav-link" to="/">Игра</router-link>
-      <router-link class="nav-link" to="/table">
-        Таблица результатов
-      </router-link>
+      <router-link class="nav-link" to="/"> Игра </router-link>
+      <router-link class="nav-link" to="/table"> Таблица результатов </router-link>
     </nav>
 
     <h1 class="title">Rick and MEMOrty</h1>
-
     <router-view />
   </div>
 </template>
@@ -18,13 +15,20 @@ import { mapActions } from 'vuex';
 
 export default {
   methods: {
-    ...mapActions(['setscoreTable']),
+    ...mapActions(['setScoreTable']),
   },
 
   created() {
-    const scoreTable = JSON.parse(localStorage.getItem('scoreTable'));
+    let scoreTable = null;
+
+    try {
+      scoreTable = JSON.parse(localStorage.getItem('scoreTable'));
+    } catch {
+      scoreTable = null;
+    }
+
     if (scoreTable) {
-      this.setscoreTable(scoreTable);
+      this.setScoreTable(scoreTable);
     }
   },
 };
@@ -38,15 +42,15 @@ export default {
 
 html,
 body,
+p,
 #app,
 .container {
-  height: 100%;
   margin: 0;
 }
 
 .container {
   max-width: 100%;
-  width: 1280px;
+  width: 1000px;
   padding: 0 40px;
   margin: 0 auto;
 }

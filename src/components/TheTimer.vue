@@ -1,37 +1,24 @@
 <template>
   <div class="timer">
-    <button
-      class="timer__button"
-      v-if="gameStatus === 'prepare' || gameStatus === 'stopped'"
-      type="button"
-      @click="startGame"
-    >
-      СТАРТ
-    </button>
-    <button
-      class="timer__button"
-      v-if="gameStatus === 'end'"
-      type="button"
-      @click="startGame"
-    >
-      ЕЩЕ РАЗ
-    </button>
-    <button
-      class="timer__button"
-      v-if="gameStatus === 'started'"
-      type="button"
-      @click="stopGame"
-    >
-      СТОП
-    </button>
-    <div class="time" v-if="gameStatus === 'started'">
-      {{ numberOfMinutes }} :
-      {{ numberOfSeconds > 9 ? numberOfSeconds : `0${numberOfSeconds}` }}
+    <div class="timer__wrapper button-wrapper">
+      <button v-if="gameStatus === 'stopped'" class="timer__button" type="button" @click="startGame">СТАРТ</button>
+      <button v-if="gameStatus === 'end'" class="timer__button" type="button" @click="startGame">ЕЩЕ РАЗ</button>
+      <button v-if="gameStatus === 'started'" class="timer__button" type="button" @click="stopGame">СТОП</button>
     </div>
-    <div class="time" v-if="gameStatus === 'end'">
-      Игра окончена! Ваше время:
-      {{ numberOfMinutes }} :
-      {{ numberOfSeconds > 9 ? numberOfSeconds : `0${numberOfSeconds}` }}
+
+    <div class="timer__wrapper timer-wrapper">
+      <div v-if="gameStatus === 'started' || gameStatus === 'prepare'" class="time">
+        {{ numberOfMinutes }} :
+        {{ numberOfSeconds > 9 ? numberOfSeconds : `0${numberOfSeconds}` }}
+      </div>
+      <div v-if="gameStatus === 'end'" class="time">
+        <p>Игра окончена!</p>
+        <p>
+          Ваше время:
+          {{ numberOfMinutes }} :
+          {{ numberOfSeconds > 9 ? numberOfSeconds : `0${numberOfSeconds}` }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -72,7 +59,7 @@ export default {
     ...mapActions(['setGameStatus']),
 
     startGame() {
-      this.setGameStatus('started');
+      this.setGameStatus('prepare');
       this.numberOfMinutes = 0;
       this.numberOfSeconds = 0;
 
@@ -85,7 +72,7 @@ export default {
             this.numberOfSeconds += 1;
           }
         }, 1000);
-      }, 2000);
+      }, 3000);
     },
 
     stopGame() {
@@ -100,8 +87,17 @@ export default {
 <style lang="scss" scoped>
 .timer {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  height: 80px;
 }
+
+.timer__wrapper {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .timer__button {
   position: relative;
   display: block;
@@ -115,9 +111,11 @@ export default {
   color: #fff;
   cursor: pointer;
 }
+
 .timer__button:hover {
   color: royalblue;
 }
+
 .timer__button::after {
   position: absolute;
   z-index: -1;

@@ -11,7 +11,7 @@ export default new Vuex.Store({
     baseUrlToImages: 'https://rickandmortyapi.com/api/character/avatar/',
     baseFileFormat: '.jpeg',
     shirtСardImage: 'https://rickandmortyapi.com/api/character/avatar/19.jpeg',
-    gameStatus: 'prepare',
+    gameStatus: 'stopped',
     scoreTable: [],
     numberOfRecordsInScoreTable: 5,
   },
@@ -43,10 +43,7 @@ export default new Vuex.Store({
       if (state.scoreTable.length > state.numberOfRecordsInScoreTable) {
         state.scoreTable.length = state.numberOfRecordsInScoreTable;
       }
-      localStorage.setItem(
-        'scoreTable',
-        JSON.stringify(state.scoreTable.sort()),
-      );
+      localStorage.setItem('scoreTable', JSON.stringify(state.scoreTable.sort()));
     },
   },
 
@@ -59,15 +56,14 @@ export default new Vuex.Store({
       }
 
       while (randomNumberList.length < 18) {
-        var randomNumber =
-          Math.floor(Math.random() * state.baseNaumberOfAvalableAvatars - 1) +
-          2;
+        var randomNumber = Math.floor(Math.random() * state.baseNaumberOfAvalableAvatars - 1) + 2;
 
-        // randomNumber !== 19/189/249 - у этих номеров картинки такие же как на обложке
+        // randomNumber !== 19/189/249 и др. - у этих номеров картинки такие же как на обложке
         if (
           randomNumberList.indexOf(randomNumber) === -1 &&
           randomNumber !== 19 &&
           randomNumber !== 66 &&
+          randomNumber !== 104 &&
           randomNumber !== 189 &&
           randomNumber !== 249
         ) {
@@ -85,16 +81,13 @@ export default new Vuex.Store({
       commit('SET_GAME_STATUS', status);
     },
 
-    setscoreTable({ commit }, table) {
+    setScoreTable({ commit }, table) {
       commit('SET_TABLE_OF_RECORDS', table);
     },
 
     addNewEntry({ commit }, newEntry) {
       const minutes = newEntry.numberOfMinutes;
-      const seconds =
-        newEntry.numberOfSeconds > 9
-          ? `${newEntry.numberOfSeconds}`
-          : `0${newEntry.numberOfSeconds}`;
+      const seconds = newEntry.numberOfSeconds > 9 ? `${newEntry.numberOfSeconds}` : `0${newEntry.numberOfSeconds}`;
       commit('ADD_NEW_ENTRY', `${minutes}:${seconds}`);
     },
   },

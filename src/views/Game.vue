@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <input v-model="testMode" type="checkbox" name="" id="" /> Читы
+    <input v-model="testMode" type="checkbox" /> Читы
 
     <the-timer @gameTime="addNewEntry"></the-timer>
 
@@ -50,9 +50,12 @@ export default {
 
   watch: {
     gameStatus(value) {
-      if (value === 'started') {
+      if (value === 'prepare') {
         this.prepareCardsToStartGame();
         this.canFlip = true;
+        setTimeout(() => {
+          value === 'starded';
+        }, 3000);
       }
 
       if (value === 'stopped') {
@@ -134,9 +137,11 @@ export default {
       this.generateRandomNumberList();
       this.generateCards();
 
-      this.cardList.map((card) => {
-        card.isFlipped = true;
-      });
+      setTimeout(() => {
+        this.cardList.map((card) => {
+          card.isFlipped = true;
+        });
+      }, 500);
 
       if (!this.testMode) {
         setTimeout(() => {
@@ -148,7 +153,8 @@ export default {
         this.cardList.map((card) => {
           card.isFlipped = false;
         });
-      }, 2000);
+        this.setGameStatus('started');
+      }, 3000);
     },
 
     generateCards() {
@@ -171,7 +177,7 @@ export default {
   },
 
   mounted() {
-    this.setGameStatus('prepare');
+    this.setGameStatus('stopped');
     this.generateCards();
   },
 };

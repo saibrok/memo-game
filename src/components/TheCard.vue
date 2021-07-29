@@ -1,17 +1,10 @@
 <template>
-  <div
-    class="game__card"
-    @click="flipCard"
-    :class="{ flip: card.isFlipped, unvisible: !card.isShow }"
-  >
+  <div class="game__card" :class="{ flip: card.isFlipped, unvisible: !card.isShow }" @click="flipCard">
     <div
       class="game__card-image game__card-image_type_face"
       :style="{ backgroundImage: 'url(' + card.image + ')' }"
     ></div>
-    <div
-      class="game__card-image game__card-image_type_shirt"
-      :style="{ backgroundImage: 'url(' + shirt + ')' }"
-    ></div>
+    <div class="game__card-image game__card-image_type_shirt" :style="{ backgroundImage: 'url(' + shirt + ')' }"></div>
   </div>
 </template>
 
@@ -39,8 +32,8 @@ export default {
 <style lang="scss" scoped>
 .game__card {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  padding-bottom: 100%;
   cursor: pointer;
   perspective: 1000px;
 }
