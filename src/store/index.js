@@ -10,6 +10,7 @@ export default new Vuex.Store({
     baseUrlToImages: 'https://rickandmortyapi.com/api/character/avatar/',
     baseFileFormat: '.jpeg',
     shirtСardImage: 'https://rickandmortyapi.com/api/character/avatar/189.jpeg',
+    gameIsStarted: false,
   },
 
   getters: {
@@ -26,6 +27,10 @@ export default new Vuex.Store({
   mutations: {
     SET_AVATAR_LIST(state, avatarList) {
       state.avatarList = avatarList;
+    },
+
+    SET_GAME_STATUS(state, status) {
+      state.gameIsStarted = status;
     },
   },
 
@@ -49,6 +54,11 @@ export default new Vuex.Store({
         avatarList.sort((a, b) => a - b),
       );
     },
+
+    setGameStatus({ commit }, status) {
+      commit('SET_GAME_STATUS', status);
+    },
   },
+
   modules: {},
 });
