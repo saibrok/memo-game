@@ -8,6 +8,14 @@
     >
       СТАРТ
     </button>
+    <button
+      class="timer__button"
+      v-if="gameStatus === 'end'"
+      type="button"
+      @click="startGame"
+    >
+      ЕЩЕ РАЗ
+    </button>
     <div class="time" v-if="gameStatus === 'started'">
       {{ numberOfMinutes }} :
       {{ numberOfSeconds > 9 ? numberOfSeconds : `0${numberOfSeconds}` }}
@@ -40,6 +48,10 @@ export default {
     gameStatus(value) {
       if (value === 'end') {
         clearInterval(this.timer);
+        this.$emit('gameTime', {
+          numberOfMinutes: this.numberOfMinutes,
+          numberOfSeconds: this.numberOfSeconds,
+        });
       }
     },
   },
@@ -49,6 +61,8 @@ export default {
 
     startGame() {
       this.setGameStatus('started');
+      this.numberOfMinutes = 0;
+      this.numberOfSeconds = 0;
 
       setTimeout(() => {
         this.timer = setInterval(() => {

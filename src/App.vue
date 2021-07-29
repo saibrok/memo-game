@@ -2,7 +2,7 @@
   <div id="app">
     <nav id="nav" class="nav">
       <router-link class="nav-link" to="/">Игра</router-link>
-      <router-link class="nav-link" to="/about">
+      <router-link class="nav-link" to="/table">
         Таблица результатов
       </router-link>
     </nav>
@@ -18,11 +18,14 @@ import { mapActions } from 'vuex';
 
 export default {
   methods: {
-    ...mapActions(['generateRandomNumberList']),
+    ...mapActions(['setscoreTable']),
   },
 
   created() {
-    this.generateRandomNumberList();
+    const scoreTable = JSON.parse(localStorage.getItem('scoreTable'));
+    if (scoreTable) {
+      this.setscoreTable(scoreTable);
+    }
   },
 };
 </script>

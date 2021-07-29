@@ -12,6 +12,8 @@ export default new Vuex.Store({
     baseFileFormat: '.jpeg',
     shirtСardImage: 'https://rickandmortyapi.com/api/character/avatar/19.jpeg',
     gameStatus: 'prepare',
+    scoreTable: [],
+    numberOfRecordsInScoreTable: 5,
   },
 
   getters: {
@@ -29,6 +31,22 @@ export default new Vuex.Store({
 
     SET_GAME_STATUS(state, status) {
       state.gameStatus = status;
+    },
+
+    SET_TABLE_OF_RECORDS(state, table) {
+      state.scoreTable = table;
+    },
+
+    ADD_NEW_ENTRY(state, newEntry) {
+      state.scoreTable.push(newEntry);
+      state.scoreTable = state.scoreTable.sort();
+      if (state.scoreTable.length > state.numberOfRecordsInScoreTable) {
+        state.scoreTable.length = state.numberOfRecordsInScoreTable;
+      }
+      localStorage.setItem(
+        'scoreTable',
+        JSON.stringify(state.scoreTable.sort()),
+      );
     },
   },
 
@@ -49,6 +67,7 @@ export default new Vuex.Store({
         if (
           randomNumberList.indexOf(randomNumber) === -1 &&
           randomNumber !== 19 &&
+          randomNumber !== 66 &&
           randomNumber !== 189 &&
           randomNumber !== 249
         ) {
@@ -64,6 +83,19 @@ export default new Vuex.Store({
 
     setGameStatus({ commit }, status) {
       commit('SET_GAME_STATUS', status);
+    },
+
+    setscoreTable({ commit }, table) {
+      commit('SET_TABLE_OF_RECORDS', table);
+    },
+
+    addNewEntry({ commit }, newEntry) {
+      const minutes = newEntry.numberOfMinutes;
+      const seconds =
+        newEntry.numberOfSeconds > 9
+          ? `${newEntry.numberOfSeconds}`
+          : `0${newEntry.numberOfSeconds}`;
+      commit('ADD_NEW_ENTRY', `${minutes}:${seconds}`);
     },
   },
 

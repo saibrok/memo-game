@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <the-timer></the-timer>
+    <input v-model="testMode" type="checkbox" name="" id="" /> Читы
+
+    <the-timer @gameTime="addNewEntry"></the-timer>
 
     <div class="game">
       <transition-group name="card" tag="div" class="cards">
@@ -34,12 +36,16 @@ export default {
       openPairs: 0,
       canFlip: false,
       cardList: [],
+      testMode: false,
     };
   },
 
   computed: {
     ...mapGetters(['imageList']),
     ...mapState(['shirtСardImage', 'gameStatus']),
+    numberOfPairsToAdd() {
+      return this.testMode ? 16 : 1;
+    },
   },
 
   watch: {
@@ -48,11 +54,18 @@ export default {
         this.prepareCardsToStartGame();
         this.canFlip = true;
       }
+      if (value === 'end') {
+        this.openPairs = 0;
+        this.cardList.map((card) => {
+          card.isShow = true;
+          card.isFlipped = true;
+        });
+      }
     },
   },
 
   methods: {
-    ...mapActions(['setGameStatus']),
+    ...mapActions(['setGameStatus', 'generateRandomNumberList', 'addNewEntry']),
 
     flipCard({ id, number }) {
       const card = this.findCardbyId(id);
@@ -69,8 +82,7 @@ export default {
         if (this.secondFlippedCard) {
           if (this.firstFlippedCard === this.secondFlippedCard) {
             this.hideCardsByNumber(this.secondFlippedCard);
-            // TODO убрать чит на спидран
-            this.openPairs += 8;
+            this.openPairs += this.numberOfPairsToAdd;
             if (this.openPairs >= 16) {
               this.setGameStatus('end');
             }
@@ -109,14 +121,18 @@ export default {
     },
 
     prepareCardsToStartGame() {
+      this.generateRandomNumberList();
+      this.generateCards();
+
       this.cardList.map((card) => {
         card.isFlipped = true;
       });
 
-      // TODO вернуть шафл
-      // setTimeout(() => {
-      //   this.cardList.sort(() => Math.random() - 0.5);
-      // }, 1000);
+      if (!this.testMode) {
+        setTimeout(() => {
+          this.cardList.sort(() => Math.random() - 0.5);
+        }, 1000);
+      }
 
       setTimeout(() => {
         this.cardList.map((card) => {
@@ -124,19 +140,29 @@ export default {
         });
       }, 2000);
     },
+
+    generateCards() {
+      const uniqueCards = this.imageList
+        .map((image, index) => {
+          return { isShow: true, isFlipped: false, image, number: index + 1 };
+        })
+        .flatMap((item) => [item, item]);
+
+      this.cardList = uniqueCards.map((card, index) => {
+        const newCard = Object.assign({}, card, { id: index });
+        return newCard;
+      });
+    },
+  },
+
+  created() {
+    this.generateRandomNumberList();
+    this.generateCards();
   },
 
   mounted() {
-    const uniqueCards = this.imageList
-      .map((image, index) => {
-        return { isShow: true, isFlipped: false, image, number: index + 1 };
-      })
-      .flatMap((item) => [item, item]);
-
-    this.cardList = uniqueCards.map((card, index) => {
-      const newCard = Object.assign({}, card, { id: index });
-      return newCard;
-    });
+    this.setGameStatus('prepare');
+    this.generateCards();
   },
 };
 </script>
