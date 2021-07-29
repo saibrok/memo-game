@@ -44,7 +44,7 @@ export default {
     ...mapGetters(['imageList']),
     ...mapState(['shirtСardImage', 'gameStatus']),
     numberOfPairsToAdd() {
-      return this.testMode ? 16 : 1;
+      return this.testMode ? 8 : 1;
     },
   },
 
@@ -54,6 +54,16 @@ export default {
         this.prepareCardsToStartGame();
         this.canFlip = true;
       }
+
+      if (value === 'stopped') {
+        this.openPairs = 0;
+        this.canFlip = false;
+        this.cardList.map((card) => {
+          card.isShow = true;
+          card.isFlipped = false;
+        });
+      }
+
       if (value === 'end') {
         this.openPairs = 0;
         this.cardList.map((card) => {

@@ -2,7 +2,7 @@
   <div class="timer">
     <button
       class="timer__button"
-      v-if="gameStatus === 'prepare'"
+      v-if="gameStatus === 'prepare' || gameStatus === 'stopped'"
       type="button"
       @click="startGame"
     >
@@ -15,6 +15,14 @@
       @click="startGame"
     >
       ЕЩЕ РАЗ
+    </button>
+    <button
+      class="timer__button"
+      v-if="gameStatus === 'started'"
+      type="button"
+      @click="stopGame"
+    >
+      СТОП
     </button>
     <div class="time" v-if="gameStatus === 'started'">
       {{ numberOfMinutes }} :
@@ -53,6 +61,10 @@ export default {
           numberOfSeconds: this.numberOfSeconds,
         });
       }
+
+      if (value === 'stopped') {
+        clearInterval(this.timer);
+      }
     },
   },
 
@@ -74,6 +86,12 @@ export default {
           }
         }, 1000);
       }, 2000);
+    },
+
+    stopGame() {
+      this.setGameStatus('stopped');
+      this.numberOfMinutes = 0;
+      this.numberOfSeconds = 0;
     },
   },
 };
