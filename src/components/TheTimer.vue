@@ -30,14 +30,16 @@ export default {
     startGame() {
       this.setGameStatus(true);
 
-      this.timer = setInterval(() => {
-        if (this.numberOfSeconds === 59) {
-          this.numberOfSeconds = 0;
-          this.numberOfMinutes += 1;
-        } else {
-          this.numberOfSeconds += 1;
-        }
-      }, 1000);
+      setTimeout(() => {
+        this.timer = setInterval(() => {
+          if (this.numberOfSeconds === 59) {
+            this.numberOfSeconds = 0;
+            this.numberOfMinutes += 1;
+          } else {
+            this.numberOfSeconds += 1;
+          }
+        }, 1000);
+      }, 2000);
     },
   },
 };

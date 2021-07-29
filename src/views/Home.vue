@@ -4,14 +4,17 @@
     <the-timer></the-timer>
 
     <div class="game">
-      <the-card
-        v-for="(card, index) in cardList"
-        :key="index"
-        :card="card"
-        :shirt="shirtСardImage"
-        :canFlip="canFlip"
-        @cardFlipped="flipCard"
-      ></the-card>
+      <transition-group name="card" tag="div" class="cards">
+        <the-card
+          v-for="card in cardList"
+          class="card"
+          :key="card.id"
+          :card="card"
+          :shirt="shirtСardImage"
+          :canFlip="canFlip"
+          @cardFlipped="flipCard"
+        ></the-card>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -36,12 +39,19 @@ export default {
 
   computed: {
     ...mapGetters(['imageList']),
-    ...mapState(['shirtСardImage']),
+    ...mapState(['shirtСardImage', 'gameIsStarted']),
+  },
+
+  watch: {
+    gameIsStarted(value) {
+      if (value) {
+        this.prepareCardsToStartGame();
+      }
+    },
   },
 
   methods: {
     flipCard({ id, number }) {
-      console.log('id', id, 'number', number);
       const card = this.findCardbyId(id);
       card.isFlipped = !card.isFlipped;
 
@@ -89,6 +99,22 @@ export default {
       this.firstFlippedCard = null;
       this.secondFlippedCard = null;
     },
+
+    prepareCardsToStartGame() {
+      this.cardList.map((card) => {
+        card.isFlipped = true;
+      });
+
+      setTimeout(() => {
+        this.cardList.sort(() => Math.random() - 0.5);
+      }, 1000);
+
+      setTimeout(() => {
+        this.cardList.map((card) => {
+          card.isFlipped = false;
+        });
+      }, 2000);
+    },
   },
 
   mounted() {
@@ -97,7 +123,6 @@ export default {
         return { isShow: true, isFlipped: false, image, number: index + 1 };
       })
       .flatMap((item) => [item, item]);
-    //.sort(() => Math.random() - 0.5);
 
     this.cardList = uniqueCards.map((card, index) => {
       const newCard = Object.assign({}, card, { id: index });
@@ -108,12 +133,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.game {
+.cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
   gap: 10px 10px;
   max-width: 100%;
   padding: 10px;
+}
+
+.card-move {
+  transition: transform 0.5s;
 }
 </style>
