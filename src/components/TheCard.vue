@@ -1,5 +1,9 @@
 <template>
-  <div class="game__card">
+  <div
+    class="game__card"
+    @click="isFliped = !isFliped"
+    :class="{ flip: isFliped }"
+  >
     <img class="game__card-image game__card-image_type_face" :src="image" />
     <img class="game__card-image game__card-image_type_shirt" :src="shirt" />
   </div>
@@ -17,6 +21,19 @@ export default {
       require: true,
     },
   },
+
+  data() {
+    return {
+      isFliped: false,
+      flipedCardCount: 0,
+    };
+  },
+
+  methods: {
+    flipCard() {
+      this;
+    },
+  },
 };
 </script>
 
@@ -27,14 +44,14 @@ export default {
   height: 150px;
   cursor: pointer;
   perspective: 1000px;
+}
 
-  &:hover .game__card-image_type_face {
-    transform: rotateY(0);
-  }
+.flip .game__card-image_type_face {
+  transform: rotateY(0);
+}
 
-  &:hover .game__card-image_type_shirt {
-    transform: rotateY(180deg);
-  }
+.flip .game__card-image_type_shirt {
+  transform: rotateY(180deg);
 }
 
 .game__card-image_type_face {
