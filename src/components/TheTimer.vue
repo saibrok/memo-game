@@ -1,9 +1,14 @@
 <template>
   <div class="timer">
-    <button v-if="!gameIsStarted" type="button" @click="startGame">
+    <button
+      class="timer__button"
+      v-if="!gameIsStarted"
+      type="button"
+      @click="startGame"
+    >
       СТАРТ
     </button>
-    <div class="timer" v-else>
+    <div class="time" v-else>
       {{ numberOfMinutes }} :
       {{ numberOfSeconds > 9 ? numberOfSeconds : `0${numberOfSeconds}` }}
     </div>
@@ -45,4 +50,49 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.timer {
+  display: flex;
+  justify-content: center;
+}
+.timer__button {
+  position: relative;
+  display: block;
+  z-index: 1;
+  margin: 1rem auto;
+  padding: 0.55em 0.75em;
+  border: 0.25rem solid royalblue;
+  overflow: hidden;
+  background: royalblue;
+  font-size: 1.5em;
+  color: #fff;
+  cursor: pointer;
+}
+.timer__button:hover {
+  color: royalblue;
+}
+.timer__button::after {
+  position: absolute;
+  z-index: -1;
+  display: block;
+  content: '';
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 0.55em 0.75em;
+  background: #fff;
+  transform: scale(0, 0);
+  transition: transform 0.3s ease;
+}
+
+.timer__button:hover::after {
+  transition: transform 0.3s ease-out;
+  transform: scale(1, 1);
+}
+
+.time {
+  font-size: 2em;
+  margin: 1rem auto;
+}
+</style>

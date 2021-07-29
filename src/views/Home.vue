@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h1>Rick and MEMOrty</h1>
     <the-timer></the-timer>
 
     <div class="game">
@@ -20,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 import TheCard from '../components/TheCard.vue';
 import TheTimer from '../components/TheTimer.vue';
 
@@ -32,7 +31,8 @@ export default {
     return {
       firstFlippedCard: null,
       secondFlippedCard: null,
-      canFlip: true,
+      openPairs: 0,
+      canFlip: false,
       cardList: [],
     };
   },
@@ -46,11 +46,14 @@ export default {
     gameIsStarted(value) {
       if (value) {
         this.prepareCardsToStartGame();
+        this.canFlip = true;
       }
     },
   },
 
   methods: {
+    ...mapActions(['setGameStatus']),
+
     flipCard({ id, number }) {
       const card = this.findCardbyId(id);
       card.isFlipped = !card.isFlipped;
@@ -66,6 +69,11 @@ export default {
         if (this.secondFlippedCard) {
           if (this.firstFlippedCard === this.secondFlippedCard) {
             this.hideCardsByNumber(this.secondFlippedCard);
+            // TODO убрать чит на спидран
+            this.openPairs += 8;
+            if (this.openPairs >= 16) {
+              this.setGameStatus(false);
+            }
           } else {
             this.resetCardByNumber(this.firstFlippedCard);
             this.resetCardByNumber(this.secondFlippedCard);
@@ -105,9 +113,10 @@ export default {
         card.isFlipped = true;
       });
 
-      setTimeout(() => {
-        this.cardList.sort(() => Math.random() - 0.5);
-      }, 1000);
+      // TODO вернуть шафл
+      // setTimeout(() => {
+      //   this.cardList.sort(() => Math.random() - 0.5);
+      // }, 1000);
 
       setTimeout(() => {
         this.cardList.map((card) => {

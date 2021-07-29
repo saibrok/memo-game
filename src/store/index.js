@@ -45,11 +45,12 @@ export default new Vuex.Store({
           Math.floor(Math.random() * state.baseNaumberOfAvalableAvatars - 1) +
           2;
 
-        // randomNumber !== 19/189 - эти номера такие же как у картинки с обложкой
+        // randomNumber !== 19/189/249 - у этих номеров картинки такие же как на обложке
         if (
           randomNumberList.indexOf(randomNumber) === -1 &&
           randomNumber !== 19 &&
-          randomNumber !== 189
+          randomNumber !== 189 &&
+          randomNumber !== 249
         ) {
           randomNumberList.push(randomNumber);
         }

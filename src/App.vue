@@ -1,9 +1,14 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Игра</router-link> |
-      <router-link to="/about">Таблица результатов</router-link>
-    </div>
+    <nav id="nav" class="nav">
+      <router-link class="nav-link" to="/">Игра</router-link>
+      <router-link class="nav-link" to="/about">
+        Таблица результатов
+      </router-link>
+    </nav>
+
+    <h1 class="title">Rick and MEMOrty</h1>
+
     <router-view />
   </div>
 </template>
@@ -25,6 +30,7 @@ export default {
 <style lang="scss">
 * {
   box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html,
@@ -40,5 +46,23 @@ body,
   width: 1280px;
   padding: 0 40px;
   margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  &:not(:last-child) {
+    margin-right: 2rem;
+  }
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
 }
 </style>
