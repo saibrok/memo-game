@@ -41,6 +41,17 @@ export default {
 
   watch: {
     gameStatus(value) {
+      if (value === 'started') {
+        this.timer = setInterval(() => {
+          if (this.numberOfSeconds === 59) {
+            this.numberOfSeconds = 0;
+            this.numberOfMinutes += 1;
+          } else {
+            this.numberOfSeconds += 1;
+          }
+        }, 1000);
+      }
+
       if (value === 'end') {
         clearInterval(this.timer);
         this.$emit('gameTime', {
@@ -62,17 +73,6 @@ export default {
       this.setGameStatus('prepare');
       this.numberOfMinutes = 0;
       this.numberOfSeconds = 0;
-
-      setTimeout(() => {
-        this.timer = setInterval(() => {
-          if (this.numberOfSeconds === 59) {
-            this.numberOfSeconds = 0;
-            this.numberOfMinutes += 1;
-          } else {
-            this.numberOfSeconds += 1;
-          }
-        }, 1000);
-      }, 3000);
     },
 
     stopGame() {

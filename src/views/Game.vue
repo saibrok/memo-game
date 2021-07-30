@@ -141,15 +141,9 @@ export default {
       this.secondFlippedCard = null;
     },
 
-    prepareCardsToStartGame() {
+    async prepareCardsToStartGame() {
       this.generateRandomNumberList();
       this.generateCards();
-
-      setTimeout(() => {
-        this.cardList.map((card) => {
-          card.isFlipped = true;
-        });
-      }, 500);
 
       if (!this.testMode) {
         setTimeout(() => {
@@ -159,9 +153,30 @@ export default {
 
       setTimeout(() => {
         this.cardList.map((card) => {
-          card.isFlipped = false;
+          card.isFlipped = true;
         });
-        this.setGameStatus('started');
+      }, 0);
+
+      await setTimeout(() => {
+        const imgLoadArr = this.cardList.map((card, index) => {
+          let img = document.createElement('img');
+          img.src = card.image;
+          img.onload = function () {
+            imgLoadArr[index] = true;
+          };
+        });
+
+        const intervalId = setInterval(() => {
+          if (imgLoadArr.every((img) => img === true)) {
+            this.cardList.map((card) => {
+              card.isFlipped = false;
+            });
+            this.setGameStatus('started');
+            clearInterval(intervalId);
+          }
+          console.log(imgLoadArr);
+          console.log(intervalId);
+        }, 1000);
       }, 3000);
     },
 
