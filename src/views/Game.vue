@@ -37,6 +37,7 @@ export default {
       canFlip: false,
       cardList: [],
       testMode: false,
+      firstCardTimerId: null,
     };
   },
 
@@ -85,16 +86,15 @@ export default {
       const card = this.findCardbyId(id);
       card.isFlipped = !card.isFlipped;
 
-      let firstCardTimer = null;
-
       if (!this.firstFlippedCard) {
         this.firstFlippedCard = number;
-        firstCardTimer = setTimeout(() => {
+        this.firstCardTimerId = setTimeout(() => {
           this.resetCardByNumber(this.firstFlippedCard);
+          this.resetCardByNumber(this.secondFlippedCard);
           this.resetFlippedCard();
         }, 5000);
       } else {
-        clearTimeout(firstCardTimer);
+        clearTimeout(this.firstCardTimerId);
         this.secondFlippedCard = number;
         this.canFlip = false;
       }

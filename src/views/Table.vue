@@ -1,28 +1,39 @@
 <template>
-  <table class="scoreTable">
-    <thead class="scoreTable__head">
-      <tr class="scoreTable__row">
-        <th class="scoreTable__col scoreTable__col-head">#</th>
-        <th class="scoreTable__col scoreTable__col-head">Имя</th>
-        <th class="scoreTable__col scoreTable__col-head">Время</th>
-      </tr>
-    </thead>
-    <tbody class="scoreTable__body">
-      <tr v-for="(row, index) in scoreTable" :key="index" class="scoreTable__row">
-        <td class="scoreTable__col">{{ index + 1 }}</td>
-        <td class="scoreTable__col">You</td>
-        <td class="scoreTable__col">{{ row }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="score">
+    <table class="scoreTable">
+      <thead class="scoreTable__head">
+        <tr class="scoreTable__row">
+          <th class="scoreTable__col scoreTable__col-head">#</th>
+          <th class="scoreTable__col scoreTable__col-head">Имя</th>
+          <th class="scoreTable__col scoreTable__col-head">Время</th>
+        </tr>
+      </thead>
+      <tbody class="scoreTable__body">
+        <tr v-for="(row, index) in scoreTable" :key="index" class="scoreTable__row">
+          <td class="scoreTable__col">{{ index + 1 }}</td>
+          <td class="scoreTable__col">You</td>
+          <td class="scoreTable__col">{{ row }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="button" @click="clearTable">Очистить</button>
+  </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
     ...mapState(['scoreTable']),
+  },
+  methods: {
+    ...mapActions(['setScoreTable']),
+
+    clearTable() {
+      this.setScoreTable(null);
+      localStorage.removeItem('scoreTable');
+    },
   },
 };
 </script>
