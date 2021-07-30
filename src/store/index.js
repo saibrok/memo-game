@@ -55,7 +55,7 @@ export default new Vuex.Store({
         return;
       }
 
-      while (randomNumberList.length < 18) {
+      while (randomNumberList.length < state.numberOfUniqueCard) {
         var randomNumber = Math.floor(Math.random() * state.baseNaumberOfAvalableAvatars - 1) + 2;
 
         // randomNumber !== 19/189/249 и др. - у этих номеров картинки такие же как на обложке
