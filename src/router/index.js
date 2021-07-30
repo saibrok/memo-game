@@ -7,6 +7,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: '*',
+    name: 'catchAll',
+    component: Game,
+  },
+  {
     path: '/',
     name: 'Game',
     component: Game,
