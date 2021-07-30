@@ -141,15 +141,9 @@ export default {
       this.secondFlippedCard = null;
     },
 
-    async prepareCardsToStartGame() {
+    prepareCardsToStartGame() {
       this.generateRandomNumberList();
       this.generateCards();
-
-      if (!this.testMode) {
-        setTimeout(() => {
-          this.cardList.sort(() => Math.random() - 0.5);
-        }, 1000);
-      }
 
       setTimeout(() => {
         this.cardList.map((card) => {
@@ -157,27 +151,38 @@ export default {
         });
       }, 0);
 
-      await setTimeout(() => {
-        const imgLoadArr = this.cardList.map((card, index) => {
-          let img = document.createElement('img');
-          img.src = card.image;
-          img.onload = function () {
-            imgLoadArr[index] = true;
-          };
-        });
+      const imgLoadArr = this.cardList.map((card, index) => {
+        let img = document.createElement('img');
+        img.src = card.image;
+        img.onload = function () {
+          imgLoadArr[index] = true;
+        };
+      });
 
-        const intervalId = setInterval(() => {
-          if (imgLoadArr.every((img) => img === true)) {
+      const intervalId = setInterval(() => {
+        if (imgLoadArr.every((img) => img === true)) {
+          setTimeout(() => {
             this.cardList.map((card) => {
               card.isFlipped = false;
             });
-            this.setGameStatus('started');
-            clearInterval(intervalId);
+          }, 1000);
+
+          if (!this.testMode) {
+            setTimeout(() => {
+              this.cardList.sort(() => Math.random() - 0.5);
+            }, 0);
           }
-          console.log(imgLoadArr);
-          console.log(intervalId);
-        }, 1000);
-      }, 3000);
+
+          setTimeout(() => {
+            this.setGameStatus('started');
+          }, 1000);
+
+          clearInterval(intervalId);
+        }
+
+        console.log(imgLoadArr);
+        console.log(intervalId);
+      }, 1000);
     },
 
     generateCards() {
